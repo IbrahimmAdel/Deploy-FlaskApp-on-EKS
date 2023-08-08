@@ -62,7 +62,7 @@ The project is structured into multiple phases, each addressing a specific aspec
 
 - Installing the **AWS Steps** plugin in Jenkins.
 - Configuring GitHub, AWS, and cluster credentials in Jenkins.
-- Creating a webhook for GitHub repository to trigger Jenkins pipeline using **[ngrok](https://dashboard.ngrok.com/get-started/setup)** .
+- Creating a webhook for GitHub repository to trigger Jenkins pipeline using [ngrok](https://dashboard.ngrok.com/get-started/setup).
 - Configuring a Jenkins pipeline to build Docker images, push them to ECR, deploy Kubernetes manifests, and print the application URL.
 - you can find more details here: [Jenkins](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Jenkins)
 
