@@ -1,6 +1,6 @@
-# Ansible Playbook Documentation
+# Ansible Playbook
 
-This document provides an overview of the Ansible playbook for installing and configuring Jenkins on an EC2 instance, along with additional roles for AWS CLI, kubectl, and Docker.
+> This document provides an overview of the Ansible playbook for installing and configuring Jenkins on an EC2 instance, along with additional roles for AWS CLI, kubectl, and Docker.
 
 ## Playbook Overview
 
@@ -22,25 +22,25 @@ The Ansible playbook performs the following tasks:
 
 ## Role Details
 
-### jenkins Role
+### [jenkins Role](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Ansible/roles/jenkins)
 
 - Updates APT cache.
 - Installs OpenJDK 11.
 - Configures Jenkins repository and installs Jenkins.
 - Fetches Jenkins initialAdminPassword and prints it.
 
-### awscli Role
+### [awscli Role](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Ansible/roles/awscli)
 
 - Installs unzip package on Ubuntu.
 - Downloads and installs AWS CLI version 2.
 - Configures AWS credentials using `aws configure`.
 
-### kubectl Role
+### [kubectl Role](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Ansible/roles/kubectl)
 
 - Installs kubectl for interacting with Kubernetes clusters.
 - Configures Kubernetes cluster credentials using `aws eks update-kubeconfig`.
 
-### docker Role
+### [docker Role](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Ansible/roles/docker)
 
 - Installs Docker on the EC2 instance.
 - Adds the Jenkins user to the Docker group.
@@ -53,8 +53,9 @@ The Ansible playbook performs the following tasks:
 2. Update variables (e.g., `aws_access_key`, `aws_secret_key`, `aws_region`, `cluster_name`) in your playbook as needed.
 3. Run the playbook using the following command:
 
-   ```bash
+   ```
    ansible-playbook -i <inventory-file> <playbook-name>.yml
+   ```
 Replace <inventory-file> with your inventory file and <playbook-name> with the name of your playbook.
 
 The playbook will execute the specified tasks on the target EC2 instance.
