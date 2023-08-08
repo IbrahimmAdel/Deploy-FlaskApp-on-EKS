@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# script to run terraform, then update ansible inventory with EC2 IP, then run ansible playbook
+#script to run terraform, then update ansible inventory with EC2 IP, then run ansible playbook
 
-# Set the paths to Terraform and Ansible directories
+#Set the paths to Terraform and Ansible directories
 terraform_dir="/home/ibrahim/ibrahim/DevOps/Final Project/Terraform"
 ansible_dir="/home/ibrahim/ibrahim/DevOps/Final Project/Ansible"
 
-# function to run terraform
+#run terraform
 terraform() {
     cd "$terraform_dir"
     echo "Running Terraform in $terraform_dir"
@@ -15,7 +15,7 @@ terraform() {
     echo "Terraform execution completed."
  }
 
-# function to take EC2 IP form ec2-ip.txt file in terraform, and update the ansible_host value in inventory.txt in ansible
+#update the ansible_host value in inventory.txt with EC2 IP 
 update_inventory() {
     echo "Updating Ansible inventory file"
     cd "$terraform_dir"
@@ -25,13 +25,13 @@ update_inventory() {
     echo "ansible_host is updated in inventory file."
 }
 
-# delete EC2 ip form ec2-ip.txt
+#delete EC2 ip form ec2-ip.txt
 clean_ec2-ip(){
     cd "$terraform_dir"
     echo "" > "$terraform_dir/ec2-ip.txt"
 }
 
-#Function to run Ansible playbook
+#run Ansible playbook
 ansible() {
     cd "$ansible_dir"
     echo "Running Ansible playbook in $ansible_dir"
@@ -45,4 +45,3 @@ update_inventory
 clean_ec2-ip
 ansible
 
-echo "infrastucture is ready"
