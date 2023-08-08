@@ -1,0 +1,39 @@
+# install aws cli to interact with AWS
+    - name: Install unzip package on Ubuntu
+      apt:
+        name: unzip
+        state: present
+
+    - name: Download AWS CLI v2
+      shell: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+      args:
+        creates: /tmp/awscliv2.zip
+
+    - name: Unzip AWS CLI
+      shell: |
+        unzip /tmp/awscliv2.zip -d /tmp
+      args:
+        creates: /tmp/aws
+
+    - name: Install AWS CLI
+      shell: |
+        /tmp/aws/install
+      args:
+        creates: /usr/local/bin/aws
+
+    - name: Remove temporary files
+      file:
+        path: /tmp/awscliv2.zip
+        state: absent
+
+# configure AWS credentials ( .aws/credentials & .aws/config )
+    - name: Configure AWS
+      shell: aws configure set {{ item.key }} {{ item.value }} --profile default
+      no_log: True 
+      with_dict:
+        aws_access_key_id: "{{ aws_access_key }}"
+        aws_secret_access_key: "{{ aws_secret_key }}"
+        region: "{{ aws_region }}"
+      become_user: ubuntu
+      changed_when: false

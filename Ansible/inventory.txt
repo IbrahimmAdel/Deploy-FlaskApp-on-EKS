@@ -1,0 +1,1 @@
+jenkins-ec2 ansible_host=44.204.158.121 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ibrahim/test.pem

@@ -1,0 +1,73 @@
+---
+# update apt package
+    - name: Update apt cache 
+      apt:
+        update_cache: yes
+
+# install java 
+    - name: Install OpenJDK 
+      apt:
+        name: openjdk-11-jdk
+        state: present
+
+# jenkins installation
+    - name: ensure the jenkins apt repository key is installed
+      apt_key: url=https://pkg.jenkins.io/debian/jenkins.io-2023.key state=present
+
+    - name: ensure the repository is configured
+      apt_repository:
+        repo: 'deb https://pkg.jenkins.io/debian-stable binary/' 
+        state: present
+
+    - name: ensure jenkins is installed
+      apt: 
+        name: jenkins 
+        update_cache: yes
+      become: true
+
+# get jenkins initial password in initialAdminPassword
+    - name: Fetch Jenkins password
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      changed_when: false
+      register: jenkins_initial_password
+
+# print jenkins initial password
+    - name: print jenkins password
+      debug:
+        var: jenkins_initial_password.stdout
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

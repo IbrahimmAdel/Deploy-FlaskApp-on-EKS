@@ -1,0 +1,16 @@
+version: '3.1' 
+services:
+
+  db:
+    build: MySQL_DB/.
+    ports:
+      - 3306:3306
+    restart: always
+    
+  app:
+    build: FlaskApp/.
+    ports:
+      - 5002:5002
+    restart: always
+    depends_on:
+      - 'db'    

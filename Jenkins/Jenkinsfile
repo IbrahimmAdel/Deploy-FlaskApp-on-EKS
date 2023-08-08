@@ -1,0 +1,80 @@
+pipeline { 
+     agent any 
+     environment {  
+        ECR_REPO = '177880501572.dkr.ecr.us-east-1.amazonaws.com/project_repo'   // ECR repo URI
+        APP_IMAGE_NAME = 'flaskapp'                                             // name of App image
+        DB_IMAGE_NAME = 'mysql'                                                // name of DB image
+        APP_PATH = 'Docker/FlaskApp/Dockerfile'                               // path to App Dockerfile in GitHub repo
+        DB_PATH = 'Docker/MySQL_DB/Dockerfile'                               // path to DB Dockerfile in GitHub repo
+        DEPLOTMENT_PATH = 'Kubernetes/deployment.yaml'                      // path to deployment.yml in GitHub repo
+        STATEFULSET_PATH = 'Kubernetes/statefulset.yaml'                   // path to the statefulset.yml in GitHub repo
+        AWS_CREDENTIALS_ID = 'aws'                                        // AWS credentials variable ID in jenkins-credentials
+        KUBECONFIG_ID = 'kubeconfig'                                     // EKS-cluster credentials variable ID in jenkins-credentials
+    }
+    stages {
+
+        stage('Build Images') {
+            steps {
+                // build and tag images to push them to ECR
+                sh "docker build -t ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER} -f ${APP_PATH} ."
+                sh "docker build -t ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER} -f ${DB_PATH} ."
+            }
+        }
+
+        stage('Push Images') {
+            steps {
+                withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
+                    sh "(aws ecr get-login-password --region us-east-1) | docker login -u AWS --password-stdin ${ECR_REPO}"
+                    sh "docker push ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}"
+                    sh "docker push ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}" 
+                }
+            }
+        }
+
+        stage('Remove Images') {
+            steps {
+                // delete images from jenkins server
+                sh "docker rmi ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}"
+                sh "docker rmi ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}"
+            }
+        }
+
+        stage('Deploy k8s Manifests') {
+            steps {
+                // update images in deployment & statefulset manifists with ECR new images
+                sh "sed -i 's|image:.*|image: ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}|g' ${DEPLOTMENT_PATH}"
+                sh "sed -i 's|image:.*|image: ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${STATEFULSET_PATH}"
+                    
+                //Deploy kubernetes manifists in EKS cluster
+                withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
+                    withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG')]) {
+                        sh "kubectl apply -f Kubernetes"   // 'Kubernetes' is a directory contains all kubernetes manifists
+                    }                          
+                }
+            }
+        }
+
+        stage('Website URL') {
+            steps {
+                script {
+                    withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
+                        withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG')]) {
+                            def url = sh(script: 'kubectl get svc flask-app-service -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"', returnStdout: true).trim()
+                            echo "Website url: http://${url}/"
+                        }
+                    }
+                }
+            }
+        }
+
+   } 
+
+    post {
+        success {
+            echo "${JOB_NAME}-${BUILD_NUMBER} pipeline succeeded"
+        }
+        failure {
+            echo "${JOB_NAME}-${BUILD_NUMBER} pipeline failed"
+        }
+    }
+}
