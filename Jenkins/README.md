@@ -135,10 +135,13 @@ post {
 ![](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Screenshots/webhook.png)
 
 
-
 ### - The URL output 
 ![](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Screenshots/print_app_url.png)
 
 ### - The Application 
 ![](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Screenshots/app.png)
+
+
+### - Kubernetes objects
+![](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Screenshots/k8s%20objects.png)
 
