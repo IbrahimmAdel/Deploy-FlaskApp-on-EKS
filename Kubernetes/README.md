@@ -1,8 +1,8 @@
 # Kubernetes Deployment and StatefulSet for Flask App and MySQL Database
 
-This document provides detailed instructions for deploying a Flask app and MySQL database using Kubernetes Deployment and StatefulSet.
+> This document provides detailed instructions for deploying a Flask app and MySQL database using Kubernetes Deployment and StatefulSet.
 
-## Project Overview
+## Overview
 
 This project demonstrates how to deploy a Flask app and MySQL database as Kubernetes services using Deployment and StatefulSet controllers.
 
