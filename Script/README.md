@@ -31,7 +31,7 @@ ansible_dir="/home/ibrahim/ibrahim/DevOps/Final Project/Ansible"
 
 #### change script permissions
 ```
-sudo chmod +x run-project.sh
+chmod u+x run-project.sh
 ```
 
 #### Execute the script to deploy the infrastructure:
