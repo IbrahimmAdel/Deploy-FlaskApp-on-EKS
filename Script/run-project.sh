@@ -40,9 +40,9 @@ ansible() {
     echo "Ansible execution completed."
 }
 
-#terraform
+terraform
 update_inventory
 clean_ec2-ip
-#ansible
+ansible
 
 echo "infrastucture is ready"
