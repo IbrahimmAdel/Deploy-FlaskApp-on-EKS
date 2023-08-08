@@ -15,7 +15,7 @@ This project demonstrates how to run a simple Flask app and MySQL database in Do
 1. Clone the repository:
 
 ```
-git clone https://github.com/uym2/MySQL-and-Python.git
+git clone https://https://github.com/IbrahimmAdel/Full-CICD-Project/Docker.git
 ```
 
 2. Build and run the Docker containers using Docker Compose:
