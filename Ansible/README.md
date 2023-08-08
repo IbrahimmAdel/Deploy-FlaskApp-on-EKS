@@ -1,11 +1,5 @@
 # Ansible Playbook Documentation
 
-* Playbook with 4 roles `jenkins` `awscli` `kubectl` `docker`
-* To run playbook : 
-```
-ansible-playbook -i inventory.txt playbook.yml
-````
-
 This document provides an overview of the Ansible playbook for installing and configuring Jenkins on an EC2 instance, along with additional roles for AWS CLI, kubectl, and Docker.
 
 ## Playbook Overview
