@@ -57,3 +57,8 @@ ansible-playbook -i <inventory-file> <playbook-name>.yml
 Replace <inventory-file> with your inventory file and <playbook-name> with the name of your playbook.
 
 The playbook will execute the specified tasks on the target EC2 instance.
+
+-----
+
+> This is all what you need to connect to your EKS cluster
+> ![](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Screenshots/check_.aws_.kube.png)
