@@ -5,9 +5,9 @@
 # Dockerized Flask App and MySQL Database
 > This document provides an overview of the Dockerized Flask app and MySQL database setup using Docker Compose.
 
-## Project Overview
+## Overview
 
-This project demonstrates how to run a simple Flask app and MySQL database in Docker containers using Docker Compose. The repository contains Dockerfiles for both the Flask app and MySQL database, as well as a `docker-compose.yml` file to define the services and their configuration.
+This document demonstrates how to run a simple Flask app and MySQL database in Docker containers using Docker Compose. The repository contains Dockerfiles for both the Flask app and MySQL database, as well as a `docker-compose.yml` file to define the services and their configuration.
 
 ## Getting Started
 - Make sure you have Docker and Docker Compose installed on your system.
