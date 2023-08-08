@@ -6,19 +6,17 @@
 
 The Ansible playbook performs the following tasks:
 
-1. **Update apt cache:** Updates the APT package cache on the target EC2 instance.
+1. **Install Jenkins:** Installs Jenkins on the EC2 instance and fetches the initialAdminPassword.
 
-2. **Install OpenJDK:** Installs OpenJDK 11 on the EC2 instance.
+2. **Install AWS CLI:** Installs AWS CLI version 2 for interacting with AWS services.
 
-3. **Install Jenkins:** Installs Jenkins on the EC2 instance and fetches the initialAdminPassword.
+3. **Configure AWS credentials:** Configures AWS credentials and region for the `default` profile.
 
-4. **Install AWS CLI:** Installs AWS CLI version 2 for interacting with AWS services.
+4. **Install kubectl:** Installs kubectl to interact with an EKS cluster.
 
-5. **Configure AWS credentials:** Configures AWS credentials and region for the `default` profile.
+5. **configure cluster credentials:** configure EKS credentials (.kube/config)
 
-6. **Install kubectl:** Installs kubectl to interact with an EKS cluster.
-
-7. **Install Docker:** Installs Docker on the EC2 instance and configures Jenkins to use Docker.
+6. **Install Docker:** Installs Docker on the EC2 instance and configures Jenkins to use Docker.
 
 ## Role Details
 
