@@ -1,10 +1,14 @@
 # Jenkins Pipeline Documentation
 
-This document provides an overview of the Jenkins pipeline for building and deploying Dockerized applications to AWS ECR and Kubernetes.
+> This document provides an overview of the Jenkins pipeline for building and deploying Dockerized applications to AWS EKS.
+
+## reqirenments
+- install [AWS Steps plugin](https://plugins.jenkins.io/pipeline-aws/#plugin-content-withaws)
+
 
 ## Pipeline Overview
 
-The Jenkins pipeline follows these stages to build, push, and deploy Docker images to AWS ECR and a Kubernetes cluster:
+The Jenkins pipeline follows these stages to build, push, and deploy Docker images to AWS ECR and an EKS cluster:
 
 1. **Build Images:** Build and tag Docker images for the Flask App and MySQL DB.
 
@@ -36,52 +40,105 @@ The following environment variables are used in the Jenkins pipeline:
 
 Builds Docker images for the Flask App and MySQL DB:
 
-```shell
-docker build -t ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER} -f ${APP_PATH} .
-docker build -t ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER} -f ${DB_PATH} .
+```
+ stage('Build Images') {
+            steps {
+                // build and tag images to push them to ECR
+                sh "docker build -t ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER} -f ${APP_PATH} ."
+                sh "docker build -t ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER} -f ${DB_PATH} ."
+            }
+        }
 ```
 
 ### Push Images
 Pushes Docker images to AWS ECR:
 
-```shell
-(aws ecr get-login-password --region us-east-1) | docker login -u AWS --password-stdin ${ECR_REPO}
-docker push ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}
-docker push ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}
+```
+stage('Push Images') {
+            steps {
+                withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
+                    sh "(aws ecr get-login-password --region us-east-1) | docker login -u AWS --password-stdin ${ECR_REPO}"
+                    sh "docker push ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}"
+                    sh "docker push ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}" 
+                }
+            }
+        }
 ```
 
 ### Remove Images
 Removes local Docker images:
 
-```shell
-docker rmi ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}
-docker rmi ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}
+```
+stage('Remove Images') {
+            steps {
+                // delete images from jenkins server
+                sh "docker rmi ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}"
+                sh "docker rmi ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}"
+            }
+        }
+
 ```
 
 ### Deploy k8s Manifests
 Updates Kubernetes deployment and statefulset manifests and deploys them to an EKS cluster:
 
-```shell
-sed -i 's|image:.*|image: ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}|g' ${DEPLOTMENT_PATH}
-sed -i 's|image:.*|image: ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${STATEFULSET_PATH}
-kubectl apply -f Kubernetes
+```
+ stage('Deploy k8s Manifests') {
+            steps {
+                // update images in deployment & statefulset manifists with ECR new images
+                sh "sed -i 's|image:.*|image: ${ECR_REPO}:${APP_IMAGE_NAME}-${BUILD_NUMBER}|g' ${DEPLOTMENT_PATH}"
+                sh "sed -i 's|image:.*|image: ${ECR_REPO}:${DB_IMAGE_NAME}-${BUILD_NUMBER}|g' ${STATEFULSET_PATH}"
+                    
+                //Deploy kubernetes manifists in EKS cluster
+                withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
+                    withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG')]) {
+                        sh "kubectl apply -f Kubernetes"   // 'Kubernetes' is a directory contains all kubernetes manifists
+                    }                          
+                }
+            }
+        }
 ```
 
 ### Website URL
 displays the deployed website URL:
 
-```shell
-def url = sh(script: 'kubectl get svc flask-app-service -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"', returnStdout: true).trim()
-echo "Website url: http://${url}/"
+```
+stage('Website URL') {
+            steps {
+                script {
+                    withAWS(credentials: "${AWS_CREDENTIALS_ID}"){
+                        withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG')]) {
+                            def url = sh(script: 'kubectl get svc flask-app-service -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"', returnStdout: true).trim()
+                            echo "Website url: http://${url}/"
+                        }
+                    }
+                }
+            }
+        }
+
+
 ```
 ### Post-Build Actions
 In case of pipeline success or failure, the following messages will be displayed:
 
 ```
-Success: ${JOB_NAME}-${BUILD_NUMBER} pipeline succeeded
-Failure: ${JOB_NAME}-${BUILD_NUMBER} pipeline failed
+post {
+        success {
+            echo "${JOB_NAME}-${BUILD_NUMBER} pipeline succeeded"
+        }
+        failure {
+            echo "${JOB_NAME}-${BUILD_NUMBER} pipeline failed"
+        }
+    }
 ```
+### - Webhook i created with `ngrok`
+![](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Screenshots/webhook.png)
 
-# resources:
-- AWS Steps plugin: https://plugins.jenkins.io/pipeline-aws/#plugin-content-withaws
+
+
+### - The URL output 
+![](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Screenshots/print_app_url.png)
+
+### - The Application 
+![](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Screenshots/app.png)
 
