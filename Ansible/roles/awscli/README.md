@@ -1,5 +1,5 @@
-Role Name
-=========
+awscli role
+===========
 
 A role to install aws cli and configure aws credentials.
 
