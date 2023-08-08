@@ -1,4 +1,4 @@
-Role Name
+kubectl
 =========
 
 A role to install Kubectl and configure credential to EKS cluster.
