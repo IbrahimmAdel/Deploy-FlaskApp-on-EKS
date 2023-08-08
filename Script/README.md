@@ -1,10 +1,11 @@
 # Infrastructure Automation Script 
-This document provides a detailed guide for using the Bash script to automate the configuration of infrastructure using Terraform and Ansible. The script orchestrates the deployment of resources using Terraform, updates the Ansible inventory with EC2 IP, and executes an Ansible playbook.
+> This document provides a detailed guide for using the Bash script to automate the configuration of infrastructure using Terraform and Ansible. The script orchestrates the deployment of resources using Terraform, updates the Ansible inventory with EC2 IP, and executes an Ansible playbook.
 
 ## Prerequisites
 - Bash-compatible terminal.
 - Terraform installed.
 - Ansible installed .
+
 
 ### Script Structure
 #### The script is designed to streamline the infrastructure deployment process through the following steps:
@@ -23,6 +24,10 @@ This document provides a detailed guide for using the Bash script to automate th
 #### set script variables
 - set terraform directory in `terraform_dir` variable
 - set ansible directory in `ansible_dir` variable
+```
+terraform_dir="/home/ibrahim/ibrahim/DevOps/Final Project/Terraform"
+ansible_dir="/home/ibrahim/ibrahim/DevOps/Final Project/Ansible"
+```
 
 #### change script permissions
 ```
