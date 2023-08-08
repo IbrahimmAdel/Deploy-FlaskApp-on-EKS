@@ -51,9 +51,9 @@ The Ansible playbook performs the following tasks:
 2. Update variables (e.g., `aws_access_key`, `aws_secret_key`, `aws_region`, `cluster_name`) in your playbook as needed.
 3. Run the playbook using the following command:
 
-   ```
-   ansible-playbook -i <inventory-file> <playbook-name>.yml
-   ```
+```
+ansible-playbook -i <inventory-file> <playbook-name>.yml
+```
 Replace <inventory-file> with your inventory file and <playbook-name> with the name of your playbook.
 
 The playbook will execute the specified tasks on the target EC2 instance.
