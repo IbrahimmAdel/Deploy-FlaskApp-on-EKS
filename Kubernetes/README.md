@@ -14,7 +14,7 @@ This project demonstrates how to deploy a Flask app and MySQL database as Kubern
 ## Deployment
 - The Flask app is deployed using a Kubernetes Deployment.
 
-```yaml
+```
 # deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -35,6 +35,13 @@ spec:
           image: flaskapp
           ports:
             - containerPort: 5002
+          resources:   
+            limits:
+              cpu: "1"   
+              memory: "512Mi"   
+            requests:
+              cpu: "0.5"   
+              memory: "128Mi" 
 
 ```
 Apply the deployment configuration:
