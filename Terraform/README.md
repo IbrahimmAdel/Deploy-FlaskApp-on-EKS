@@ -1,12 +1,7 @@
 # Terraform Infrastructure Deployment Documentation
 
-> This document provides detailed instructions for deploying infrastructure using Terraform. The project consists of four modules: `ec2`, `ecr`, `eks`, and `network`. The goal is to create an environment that includes an EC2 instance for Jenkins, an ECR repository, an EKS cluster with worker nodes, and a network infrastructure with subnets and NAT gateways.
+> This document provides detailed instructions for deploying infrastructure using Terraform. I have created four modules in this project: `ec2`, `ecr`, `eks`, and `network`. The goal is to create an environment that includes an EC2 instance for Jenkins, an ECR repository, an EKS cluster with worker nodes, and a network infrastructure with subnets and NAT gateways.
 
-## Prerequisites
-
-- Terraform installed.
-- AWS credentials and CLI configured.
-- Basic understanding of Terraform and AWS services.
 
 ## Modules Overview
 
@@ -36,10 +31,34 @@ git clone https://github.com/IbrahimmAdel/Full-CICD-Project.git
 ```
 terraform init
 ```
-3. Review and adjust variables:  
-Open the [variables.tf](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Terraform/variables.tf) file and adjust variables as needed.
+3. Review and adjust variables: [variables.tf](https://github.com/IbrahimmAdel/Full-CICD-Project/blob/master/Terraform/variables.tf)
+```
+variable "profile" {
+  type = string
+}
+variable "region" {
+  type = string
+}
 
-4. Deploy the infrastructure:
+# network-module variables
+variable "vpc_cidr" {}
+
+variable "public_subnets" {
+  type = list(object({
+    subnets_cidr      = string
+    availability_zone = string
+  }))
+}
+
+variable "private_subnets" {
+  type = list(object({
+    subnets_cidr      = string
+    availability_zone = string
+  }))
+}
+```
+
+5. Deploy the infrastructure:
 ```
 terraform apply
 ```
