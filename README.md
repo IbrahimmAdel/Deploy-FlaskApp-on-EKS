@@ -72,7 +72,6 @@ The project is structured into multiple phases, each addressing a specific aspec
 #### This comprehensive DevOps infrastructure deployment project showcases the integration of various tools and technologies to achieve a seamless end-to-end deployment process. By following the step-by-step guide, you have successfully created a robust pipeline for building, deploying, and managing a Flask web application and MySQL database on AWS with Kubernetes. This project provides a strong foundation for scaling and enhancing your DevOps practices.
 
 #### Feel free to explore and optimize each component further and adapt the project to your specific needs. Happy deploying!
-- Please replace any placeholders (such as URLs, paths, and credentials) with your actual project details before adding this content to your README.md file.
 
 
 
