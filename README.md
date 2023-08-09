@@ -1,4 +1,4 @@
-# *DevOps Bootcamp Capstone Project*
+# DevOps Bootcamp Capstone Project
 
 ## Overview
 This project aims to automate the deployment of a Flask web application and MySQL database using Docker containers. The deployment process is orchestrated through Terraform for infrastructure provisioning, Ansible for server configuration, and Jenkins for continuous integration and deployment (CI/CD) with Kubernetes for container orchestration.
