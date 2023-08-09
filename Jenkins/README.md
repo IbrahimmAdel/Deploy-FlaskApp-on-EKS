@@ -2,7 +2,7 @@
 
 > This document provides an overview of the Jenkins pipeline for building and deploying Dockerized applications to AWS EKS.
 
-## reqirenments
+## Requirements
 - install [AWS Steps plugin](https://plugins.jenkins.io/pipeline-aws/#plugin-content-withaws)
 
 
