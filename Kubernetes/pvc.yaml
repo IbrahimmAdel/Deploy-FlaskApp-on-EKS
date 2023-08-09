@@ -8,6 +8,6 @@ spec:
   resources:
     requests:
       storage: 5Gi 
-  storageClassName: ebs-storage-class # Storage class name
+  storageClassName: ebs-storage-class 
 
 
