@@ -8,7 +8,7 @@ The Ansible playbook performs the following tasks:
 
 1. **Install Jenkins:** Installs Jenkins on the EC2 instance and fetches the initialAdminPassword.
 
-2. **Install AWS CLI:** Installs AWS CLI version 2 for interacting with AWS services.
+2. **Install AWS CLI:** Installs AWS CLI for interacting with AWS services.
 
 3. **Configure AWS credentials:** Configures AWS credentials and region for the `default` profile.
 
@@ -30,7 +30,7 @@ The Ansible playbook performs the following tasks:
 ### [awscli Role](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Ansible/roles/awscli)
 
 - Installs unzip package on Ubuntu.
-- Downloads and installs AWS CLI version 2.
+- Downloads and installs AWS CLI.
 - Configures AWS credentials using `aws configure`.
 
 ### [kubectl Role](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Ansible/roles/kubectl)
