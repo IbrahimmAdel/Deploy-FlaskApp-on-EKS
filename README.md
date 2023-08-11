@@ -35,7 +35,7 @@ The project is structured into multiple phases, each addressing a specific aspec
 
 - Writing Dockerfiles for Flask app and MySQL database.
 - Creating a Docker Compose file to run both containers locally for testing.
-- you can find more details here: [Docker](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Docker)
+- For more details: [Docker](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Docker)
 
 ### 3. Setting Up the AWS Infrastructure with Terraform
 
@@ -44,19 +44,18 @@ The project is structured into multiple phases, each addressing a specific aspec
 - Launching an EC2 instance for hosting Jenkins.
 - Creating an Amazon ECR repository for Docker images.
 - Provisioning an Amazon EKS cluster with worker nodes in private subnets.
-- you can find more details here: [Terraform](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Terraform)
+- For more details: [Terraform](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Terraform)
 
 ### 4. Configuring EC2 Instance with Ansible
 
 - Installing Jenkins on the EC2 instance using Ansible.
 - Setting up AWS CLI, kubectl, and Docker using Ansible playbooks.
-- you can find more details here: [Ansible](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Ansible)
-
+- For more details: [Ansible](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Ansible)
 
 ### 5. Creating Kubernetes Manifests
 
 - Defining Kubernetes Deployment, Services, StatefulSet, ConfigMap, Secrets, Ingress, PersistentVolume (PV), and PersistentVolumeClaim (PVC) for the Flask app and MySQL database.
-- you can find more details here: [Kubernetes](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Kubernetes)
+- For more details: [Kubernetes](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Kubernetes)
 
 ### 6. Jenkins Pipeline Setup
 
@@ -64,7 +63,7 @@ The project is structured into multiple phases, each addressing a specific aspec
 - Configuring GitHub, AWS, and cluster credentials in Jenkins.
 - Creating a webhook for GitHub repository to trigger Jenkins pipeline using [ngrok](https://dashboard.ngrok.com/get-started/setup).
 - Configuring a Jenkins pipeline to build Docker images, push them to ECR, deploy Kubernetes manifests, and print the application URL.
-- you can find more details here: [Jenkins](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Jenkins)
+- For more details: [Jenkins](https://github.com/IbrahimmAdel/Full-CICD-Project/tree/master/Jenkins)
 
 ----
 ## Conclusion
