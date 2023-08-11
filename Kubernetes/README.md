@@ -138,9 +138,9 @@ Apply the StatefulSet configuration:
 ```
 kubectl apply -f statefulset.yaml
 ```
-## Services
+# Services
 
-# deployment_service.yaml
+## deployment_service.yaml
 - loadbalancer service for the deployment
 ```
 apiVersion: v1
@@ -155,7 +155,7 @@ spec:
       - port: 80 
         targetPort: 5002  
 ```
-# statefulset_service.yaml
+## statefulset_service.yaml
 - ClusterIP service for the statefulset
 ```
 apiVersion: v1
@@ -248,8 +248,8 @@ spec:
                 port:
                   number: 80
 ```
-
-Usage
+----
+## Usage
 Access the Flask app by visiting the LoadBalancer IP or URL.
 
 
