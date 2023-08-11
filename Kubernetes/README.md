@@ -15,16 +15,16 @@ This project demonstrates how to deploy a Flask app and MySQL database as Kubern
 - The Flask app is deployed using a Kubernetes Deployment.
 
 ```
-# deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flask-app-deployment
 spec:
-  replicas: 1
+  replicas: 1 
   selector:
     matchLabels:
       app: flask-app
+
   template:
     metadata:
       labels:
@@ -34,7 +34,8 @@ spec:
         - name: flask-app-container
           image: flaskapp
           ports:
-            - containerPort: 5002
+            - containerPort: 5002  
+
           resources:   
             limits:
               cpu: "1"   
@@ -42,6 +43,45 @@ spec:
             requests:
               cpu: "0.5"   
               memory: "128Mi" 
+              
+          env:
+            - name: MYSQL_DATABASE_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: MYSQL_DATABASE
+                  
+            - name: MYSQL_DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: MYSQL_DATABASE_HOST
+                  
+            - name: MYSQL_DATABASE_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: MYSQL_DATABASE_USER
+                  
+            - name: MYSQL_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: MYSQL_DATABASE_PASSWORD
+
+          readinessProbe:
+            httpGet:
+              path: /           
+              port: 5002
+            initialDelaySeconds: 10   
+            periodSeconds: 5         
+
+          livenessProbe:
+            httpGet:
+              path: /           
+              port: 5002
+            initialDelaySeconds: 30   
+            periodSeconds: 10         
 
 ```
 Apply the deployment configuration:
@@ -64,6 +104,7 @@ spec:
   selector:
     matchLabels:
       app: mysql
+      
   template:
     metadata:
       labels:
@@ -72,10 +113,25 @@ spec:
       containers:
         - name: mysql
           image: db
+
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: MYSQL_ROOT_PASSWORD
+
           ports:
             - containerPort: 3306
-          # Add environment variables, volume mounts, etc.
 
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: pvc
 ```
 Apply the StatefulSet configuration:
 
@@ -84,7 +140,8 @@ kubectl apply -f statefulset.yaml
 ```
 ## Services
 
-# service-app.yaml
+# deployment_service.yaml
+- loadbalancer service for the deployment
 ```
 apiVersion: v1
 kind: Service
@@ -95,10 +152,11 @@ spec:
     app: flask-app
   type: LoadBalancer
   ports:
-    - port: 80
-      targetPort: 5002
+      - port: 80 
+        targetPort: 5002  
 ```
-# service-db.yaml
+# statefulset_service.yaml
+- ClusterIP service for the statefulset
 ```
 apiVersion: v1
 kind: Service
@@ -114,9 +172,83 @@ spec:
 ```
 Apply the service configurations:
 ```
-kubectl apply -f service-app.yaml
-kubectl apply -f service-db.yaml
+kubectl apply -f deployment_service.yaml
+kubectl apply -f statefulset_service.yaml
 ```
+# configmap.yaml
+```
+apiVersion: v1
+kind: ConfigMap 
+metadata:
+  name: configmap 
+data:
+  MYSQL_DATABASE_USER: "root"
+  MYSQL_DATABASE_HOST: "mysql-service"
+  MYSQL_DATABASE: "BucketList"
+```
+# secrets.yaml
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secrets
+data:
+  MYSQL_DATABASE_PASSWORD: aWJyYWhpbTEyMw==
+  MYSQL_ROOT_PASSWORD: aWJyYWhpbTEyMw==
+```
+# pv.yaml
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv
+spec:
+  capacity:
+    storage: 5Gi  
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ebs-storage-class
+  hostPath:
+    path: /var/lib/mysql    
+```
+# pvc.yaml
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi 
+  storageClassName: ebs-storage-class 
+```
+# ingress.yaml
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cluster-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+      - http:
+         paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: flask-app-service
+                port:
+                  number: 80
+```
+
 Usage
 Access the Flask app by visiting the LoadBalancer IP or URL.
 
