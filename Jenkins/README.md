@@ -1,4 +1,4 @@
-# Jenkins Pipeline Documentation
+# Jenkins Pipeline 
 
 > This document provides an overview of the Jenkins pipeline for building and deploying Dockerized applications to AWS EKS.
 
