@@ -1,8 +1,9 @@
-# DevOps Bootcamp Capstone Project
+# Deploy Flask App on EKS cluster
 
 ## Overview
 This project aims to automate the deployment of a Flask web application and MySQL database using Docker containers. The deployment process is orchestrated through Terraform for infrastructure provisioning, Ansible for server configuration, and Jenkins for continuous integration and deployment (CI/CD) with Kubernetes for container orchestration.
 
+![](https://github.com/IbrahimmAdel/Deploy-FlaskApp-on-EKS/blob/master/Screenshots/Presentation.gif)
 
 ## Tools
 
